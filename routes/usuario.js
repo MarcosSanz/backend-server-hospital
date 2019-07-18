@@ -2,7 +2,7 @@ var express = require('express')
 var bcrypt = require('bcryptjs');
 var jwt = require('jsonwebtoken');
 
-// var SEED = require('../config/config').SEED;
+var SEED = require('../config/config').SEED;
 
 // var mdAutenticacion = require('../middlewares/autenticacion');
 
@@ -38,25 +38,22 @@ app.get('/', (req, res, next) => {
 // Verificar token
 // ===============================
 
-// app.use('/', (req, res, next) => {
+app.use('/', (req, res, next) => {
 
-//   var token = req.query.token;
+  var token = req.query.token;
 
-//   jwt.verify(token, SEED, (err, decoded) => {
-
-//     if (err) {
-//       return res.status(401).json({
-//         ok: false,
-//         mensaje: 'Token incorrecto',
-//         errors: err
-//       });
-//     }
-
-//     // req.usuario = decoded.usuario;
-//     next();
-
-//   });
-// });
+  jwt.verify(token, SEED, (err, decoded) => {
+    if (err) {
+      return res.status(401).json({
+        ok: false,
+        mensaje: 'Token incorrecto',
+        errors: err
+      });
+    }
+    // req.usuario = decoded.usuario;
+    next();
+  });
+});
 
 // ===============================
 // Acturalizar usuarios
