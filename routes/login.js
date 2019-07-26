@@ -73,7 +73,7 @@ app.post('/google', async (req, res) => {
           ok: true,
           usuario: usuarioDB,
           token: token,
-          id: usuarioDB._id
+          id: usuarioDB.id
         });
       }
     } else {
@@ -93,7 +93,7 @@ app.post('/google', async (req, res) => {
           ok: true,
           usuario: usuarioDB,
           token: token,
-          id: usuarioDB._id
+          id: usuarioDB.id
         });
       });
     }
@@ -146,7 +146,7 @@ app.post('/', (req, res) => {
       ok: true,
       usuario: usuarioDB,
       token: token,
-      id: usuarioDB._id
+      id: usuarioDB.id
     });
   })
 });

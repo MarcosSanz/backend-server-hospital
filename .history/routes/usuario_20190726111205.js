@@ -79,7 +79,7 @@ app.put('/:id', mdAutenticacion.verificaToken, (req, res) => {
     }
 
     usuario.nombre = body.nombre;
-    usuario.email = body.email;
+    usuario.emil = body.email;
     usuario.role = body.role;
 
     usuario.save((err, usuarioGuardado) => {
@@ -90,9 +90,6 @@ app.put('/:id', mdAutenticacion.verificaToken, (req, res) => {
           errors: err
         });
       }
-
-      usuarioGuardado.password = ':)';
-      
       res.status(200).json({
         ok: true,
         usuario: usuarioGuardado

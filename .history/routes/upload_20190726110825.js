@@ -111,7 +111,7 @@ function subirPorTipo(tipo, id, nombreArchivo, res) {
 
       if (!medico) {
         return res.status(400).json({
-          ok: true,
+          ok: false,
           mensaje: 'Medico no existe',
           errors: { message: 'Medico no existe' }
         });
@@ -131,7 +131,7 @@ function subirPorTipo(tipo, id, nombreArchivo, res) {
 
         return res.status(200).json({
           ok: true,
-          mensaje: 'Imagen de médico actualizada',
+          mensaje: 'Imagen de medico actualizada',
           medico: medicoActualizado
         });
       });
