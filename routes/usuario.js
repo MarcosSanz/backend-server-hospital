@@ -34,7 +34,7 @@ app.get('/', (req, res, next) => {
         }
 
         // variable para mostrar el contador del total.
-        Usuario.count({}, (err, conteo) =>{
+        Usuario.count({}, (err, conteo) => {
 
           if (err) {
             return res.status(500).json({
@@ -43,21 +43,20 @@ app.get('/', (req, res, next) => {
               errors: err
             });
           }
-          
+
           res.status(200).json({
             ok: true,
-            usuarios: usuarios,            
+            usuarios: usuarios,
             total: conteo
           });
         });
-
       });
 });
 
 // ===============================
-// Acturalizar usuarios
+// Acturalizar usuario
 // ===============================
-app.put('/:id', mdAutenticacion.verificaToken, (req, res) => {
+app.put('/:id', [mdAutenticacion.verificaToken, mdAutenticacion.verificaADMIN_o_MismoUsuario], (req, res) => {
 
   var id = req.params.id;
   var body = req.body;
@@ -92,14 +91,11 @@ app.put('/:id', mdAutenticacion.verificaToken, (req, res) => {
       }
 
       usuarioGuardado.password = ':)';
-      
       res.status(200).json({
         ok: true,
         usuario: usuarioGuardado
       });
-
     });
-
   });
 });
 
@@ -131,13 +127,12 @@ app.post('/', (req, res) => {
       usuariotoken: req.usuario
     });
   });
-
 });
 
 // ===============================
 // Borrar un usuario
 // ===============================
-app.delete('/:id', mdAutenticacion.verificaToken, (req, res) => {
+app.delete('/:id', [mdAutenticacion.verificaToken, mdAutenticacion.verificaADMIN_ROLE], (req, res) => {
 
   var id = req.params.id;
 
@@ -161,7 +156,6 @@ app.delete('/:id', mdAutenticacion.verificaToken, (req, res) => {
       usuario: usuarioBorrado
     });
   });
-
 });
 
 module.exports = app;
