@@ -146,6 +146,7 @@ app.post('/', mdAutenticacion.verificaToken, (req, res) => {
       hospital: hospitalGuardado
     });
   });
+
 });
 
 // ===============================

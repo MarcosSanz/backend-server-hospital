@@ -70,6 +70,7 @@ app.get('/todo/:busqueda', (req, res, next) => {
         usuarios: respuestas[2]
       });
     });
+
 });
 
 // Hacemos una promesa para que el servicio de busqueda se asincrono y poder buscar en varios servicios.
@@ -116,12 +117,12 @@ function buscarUsuarios(busqueda, regex) {
 
     Usuario.find({}, 'nombre email role img')
       .or([{ 'nombre': regex }, { 'email': regex }])
-      .exec((err, usuarios) => {
+      .exec((err, usuario) => {
 
         if (err) {
           reject('Error al cargar usuarios', err);
         } else {
-          resolve(usuarios);
+          resolve(usuario);
         }
       });
   });

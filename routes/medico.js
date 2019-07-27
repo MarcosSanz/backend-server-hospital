@@ -6,6 +6,8 @@ var app = express();
 
 var Medico = require('../models/medico');
 
+
+
 // ===============================
 // Obtener todos los medicos
 // ===============================
@@ -35,23 +37,55 @@ app.get('/', (req, res, next) => {
         }
 
         // variable para mostrar el contador del total.
-        Medico.count({}, (err, conteo) =>{
+        Medico.count({}, (err, conteo) => {
           if (err) {
             return res.status(500).json({
               ok: false,
               mensaje: 'Error cargando paginación de medicos',
               errors: err
             });
-          }          
+          }
           res.status(200).json({
             ok: true,
-            medicos: medicos,            
+            medicos: medicos,
             total: conteo
           });
         });
 
       });
 });
+// ===============================
+// Obtener medicos
+// ===============================
+app.get('/:id', (req, res) => {
+
+  var id = req.params.id;
+
+  Medico.findById(id)
+    .populate('usuario', 'nombre email img')
+    .populate('hospital')
+    .exec((err, medico) => {
+      if (err) {
+        return res.status(500).json({
+          ok: false,
+          mensaje: 'Error al buscar el medico',
+          errors: err
+        });
+      }
+      if (!medico) {
+        return res.status(400).json({
+          ok: false,
+          mensaje: 'El medico con el id: ' + id + ' no existe',
+          errors: { message: 'No existe un medico con ese ID' }
+        });
+      }
+      res.status(200).json({
+        ok: true,
+        medico: medico
+      });
+    });
+});
+
 
 // ===============================
 // Actualizar medicos
@@ -78,7 +112,7 @@ app.put('/:id', mdAutenticacion.verificaToken, (req, res) => {
     }
 
     medico.nombre = body.nombre;
-    medico.usuario = req.usuario._id;
+    medico.usuario = req.usuario.id;
     medico.hospital = body.hospital;
 
     medico.save((err, medicoGuardado) => {
@@ -107,7 +141,7 @@ app.post('/', mdAutenticacion.verificaToken, (req, res) => {
   var body = req.body;
   var medico = new Medico({
     nombre: body.nombre,
-    usuario: req.usuario._id,
+    usuario: req.usuario.id,
     hospital: body.hospital
   })
 

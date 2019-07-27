@@ -11,6 +11,7 @@ exports.verificaToken = function (req, res, next) {
   var token = req.query.token;
 
   jwt.verify(token, SEED, (err, decoded) => {
+
     if (err) {
       return res.status(401).json({
         ok: false,
@@ -18,10 +19,48 @@ exports.verificaToken = function (req, res, next) {
         errors: err
       });
     }
-
     req.usuario = decoded.usuario;
     next();
-    
   });
+}
 
+// ===============================
+// Verificar ADMIN
+// ===============================
+
+exports.verificaADMIN_ROLE = function (req, res, next) {
+
+  var usuario = req.usuario;
+  
+  if (usuario.role === 'ADMIN_ROLE') {
+    next();
+    return;
+  } else {
+    return res.status(401).json({
+      ok: false,
+      mensaje: 'Token incorrecto - No es administrador',
+      errors: { message: ' No es administrador- No puede hacer eso' }
+    });
+  }
+}
+
+// ===============================
+// Verificar ADMIN o Mismo Usuario
+// ===============================
+
+exports.verificaADMIN_o_MismoUsuario = function (req, res, next) {
+
+  var usuario = req.usuario;
+  var id = req.params.id;
+
+  if (usuario.role === 'ADMIN_ROLE' || usuario.id === id) {
+    next();
+    return;
+  } else {
+    return res.status(401).json({
+      ok: false,
+      mensaje: 'Token incorrecto - No es administrador ni el mismo usuario',
+      errors: { message: ' No es administrador- No puede hacer eso' }
+    });
+  }
 }
